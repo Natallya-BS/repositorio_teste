@@ -11,7 +11,24 @@ typedef struct {
 } Produto;
 
 // Funções declaradas
-void adicionarProduto(Produto estoque[], int *quantidadeProdutos);
+void adicionarProduto(Produto estoque[], int *quantidadeProdutos) {
+    if (*quantidadeProdutos >= MAX_PRODUTOS) {
+        printf("Estoque cheio! Não é possível adicionar mais produtos.\n");
+        return;
+    }
+    Produto p;
+    printf("Digite o nome do produto: ");
+    scanf("%s", p.nome);
+    printf("Digite a quantidade: ");
+    scanf("%d", &p.quantidade);
+    printf("Digite o preço: ");
+    scanf("%f", &p.preco);
+
+    estoque[*quantidadeProdutos] = p;
+    (*quantidadeProdutos)++;
+    printf("Produto adicionado com sucesso!\n");
+}
+
 void consultarEstoque(Produto estoque[], int quantidadeProdutos);
 void venderProduto(Produto estoque[], int *quantidadeProdutos);
 
