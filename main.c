@@ -29,7 +29,17 @@ void adicionarProduto(Produto estoque[], int *quantidadeProdutos) {
     printf("Produto adicionado com sucesso!\n");
 }
 
-void consultarEstoque(Produto estoque[], int quantidadeProdutos);
+void consultarEstoque(Produto estoque[], int quantidadeProdutos) {
+    if (quantidadeProdutos == 0) {
+        printf("O estoque está vazio!\n");
+        return;
+    }
+    printf("\nEstoque Atual:\n");
+    for (int i = 0; i < quantidadeProdutos; i++) {
+        printf("Produto: %s, Quantidade: %d, Preço: %.2f\n", estoque[i].nome, estoque[i].quantidade, estoque[i].preco);
+    }
+}
+
 void venderProduto(Produto estoque[], int *quantidadeProdutos);
 
 int main() {
