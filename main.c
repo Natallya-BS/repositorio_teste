@@ -40,7 +40,33 @@ void consultarEstoque(Produto estoque[], int quantidadeProdutos) {
     }
 }
 
-void venderProduto(Produto estoque[], int *quantidadeProdutos);
+void venderProduto(Produto estoque[], int *quantidadeProdutos) {
+    char nomeProduto[50];
+    int quantidadeVenda;
+
+    printf("Digite o nome do produto a ser vendido: ");
+    scanf("%s", nomeProduto);
+    printf("Digite a quantidade a ser vendida: ");
+    scanf("%d", &quantidadeVenda);
+
+    int encontrado = 0;
+    for (int i = 0; i < *quantidadeProdutos; i++) {
+        if (strcmp(estoque[i].nome, nomeProduto) == 0) {
+            if (estoque[i].quantidade >= quantidadeVenda) {
+                estoque[i].quantidade -= quantidadeVenda;
+                printf("Venda realizada com sucesso!\n");
+            } else {
+                printf("Quantidade insuficiente em estoque!\n");
+            }
+            encontrado = 1;
+            break;
+        }
+    }
+    if (!encontrado) {
+        printf("Produto não encontrado no estoque.\n");
+    }
+}
+
 
 int main() {
     Produto estoque[MAX_PRODUTOS];
