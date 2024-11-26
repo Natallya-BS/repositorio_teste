@@ -1,80 +1,78 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_PRODUTOS 100
-
-// Definindo a estrutura para armazenar os dados do produto
-typedef struct {
+// Definindo a estrutura para os produtos
+struct Produto {
     char nome[50];
     int quantidade;
     float preco;
-} Produto;
+};
 
-// Funções declaradas
-void adicionarProduto(Produto estoque[], int *quantidadeProdutos) {
-    if (*quantidadeProdutos >= MAX_PRODUTOS) {
-        printf("Estoque cheio! Não é possível adicionar mais produtos.\n");
-        return;
-    }
-    Produto p;
+// Função para adicionar produto
+void adicionarProduto(struct Produto produtos[], int *contador) {
     printf("Digite o nome do produto: ");
-    scanf("%s", p.nome);
-    printf("Digite a quantidade: ");
-    scanf("%d", &p.quantidade);
-    printf("Digite o preço: ");
-    scanf("%f", &p.preco);
+    scanf(" %[^\n]s", produtos[*contador].nome);  // Lê o nome do produto com espaços
+    printf("Digite a quantidade do produto: ");
+    scanf("%d", &produtos[*contador].quantidade);
+    printf("Digite o preço do produto: ");
+    scanf("%f", &produtos[*contador].preco);
 
-    estoque[*quantidadeProdutos] = p;
-    (*quantidadeProdutos)++;
-    printf("Produto adicionado com sucesso!\n");
+    (*contador)++;  // Incrementa o contador de produtos
+    printf("Produto adicionado com sucesso!\n\n");
 }
 
-void consultarEstoque(Produto estoque[], int quantidadeProdutos) {
-    if (quantidadeProdutos == 0) {
-        printf("O estoque está vazio!\n");
+// Função para consultar o estoque
+void consultarEstoque(struct Produto produtos[], int contador) {
+    if (contador == 0) {
+        printf("Estoque vazio!\n\n");
         return;
     }
-    printf("\nEstoque Atual:\n");
-    for (int i = 0; i < quantidadeProdutos; i++) {
-        printf("Produto: %s, Quantidade: %d, Preço: %.2f\n", estoque[i].nome, estoque[i].quantidade, estoque[i].preco);
+
+    printf("\nEstoque de produtos:\n");
+    for (int i = 0; i < contador; i++) {
+        printf("Produto: %s | Quantidade: %d | Preço: %.2f\n", 
+                produtos[i].nome, produtos[i].quantidade, produtos[i].preco);
     }
+    printf("\n");
 }
 
-void venderProduto(Produto estoque[], int *quantidadeProdutos) {
+// Função para vender produto
+void venderProduto(struct Produto produtos[], int *contador) {
     char nomeProduto[50];
-    int quantidadeVenda;
+    int quantidade;
+    int encontrado = 0;
 
     printf("Digite o nome do produto a ser vendido: ");
-    scanf("%s", nomeProduto);
+    scanf(" %[^\n]s", nomeProduto);
     printf("Digite a quantidade a ser vendida: ");
-    scanf("%d", &quantidadeVenda);
+    scanf("%d", &quantidade);
 
-    int encontrado = 0;
-    for (int i = 0; i < *quantidadeProdutos; i++) {
-        if (strcmp(estoque[i].nome, nomeProduto) == 0) {
-            if (estoque[i].quantidade >= quantidadeVenda) {
-                estoque[i].quantidade -= quantidadeVenda;
-                printf("Venda realizada com sucesso!\n");
+    for (int i = 0; i < *contador; i++) {
+        if (strcmp(produtos[i].nome, nomeProduto) == 0) {
+            if (produtos[i].quantidade >= quantidade) {
+                produtos[i].quantidade -= quantidade;
+                printf("Venda realizada com sucesso! %d unidades de %s vendidas.\n\n", quantidade, nomeProduto);
             } else {
-                printf("Quantidade insuficiente em estoque!\n");
+                printf("Erro: Quantidade solicitada maior que a disponível no estoque!\n\n");
             }
             encontrado = 1;
             break;
         }
     }
+
     if (!encontrado) {
-        printf("Produto não encontrado no estoque.\n");
+        printf("Produto não encontrado no estoque!\n\n");
     }
 }
 
-
 int main() {
-    Produto estoque[MAX_PRODUTOS];
-    int quantidadeProdutos = 0;
+    struct Produto produtos[100];  // Lista de produtos
+    int contador = 0;  // Contador de produtos cadastrados
     int opcao;
 
-    while (1) {
-        printf("\nMenu de Gerenciamento de Estoque\n");
+    do {
+        // Exibe o menu para o usuário
+        printf("----- Menu Principal -----\n");
         printf("1. Adicionar produto\n");
         printf("2. Consultar estoque\n");
         printf("3. Vender produto\n");
@@ -84,19 +82,22 @@ int main() {
 
         switch (opcao) {
             case 1:
-                adicionarProduto(estoque, &quantidadeProdutos);
+                adicionarProduto(produtos, &contador);
                 break;
             case 2:
-                consultarEstoque(estoque, quantidadeProdutos);
+                consultarEstoque(produtos, contador);
                 break;
             case 3:
-                venderProduto(estoque, &quantidadeProdutos);
+                venderProduto(produtos, &contador);
                 break;
             case 4:
                 printf("Saindo do programa...\n");
-                return 0;
+                break;
             default:
-                printf("Opcao invalida! Tente novamente.\n");
+                printf("Opcao invalida! Tente novamente.\n\n");
         }
-    }
+
+    } while (opcao != 4);
+
+    return 0;
 }
